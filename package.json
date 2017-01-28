@@ -1,0 +1,32 @@
+{
+  "name": "geojson-slicer",
+  "version": "0.0.1",
+  "description": "slice a set of features to fit within a certain bounding box",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anetz89/geojson-slicer.git"
+  },
+  "keywords": [
+    "geojson",
+    "util",
+    "slice",
+    "bounding",
+    "box",
+    "cut",
+    "stamp"
+  ],
+  "author": "anetz89",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anetz89/geojson-slicer/issues"
+  },
+  "homepage": "https://github.com/anetz89/geojson-slicer#readme",
+  "dependencies": {
+    "npmlog": "^4.0.2",
+    "point-in-polygon": "^1.0.1"
+  }
+}
