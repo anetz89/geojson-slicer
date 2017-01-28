@@ -64,7 +64,15 @@
     }
 
     function slicePolygon(feature, bounds) {
-        return null;
+        var result = lineclip.polygon(feature.geometry.coordinates, bounds2clipBounds(bounds));
+
+        if (result.length) {
+            // line is within bounds.
+            if (options.cutFeatures) {
+                feature.geometry.coordinates = result;
+            }
+            return feature;
+        }
     }
 
     function sliceMultiPolygon(feature, bounds) {
