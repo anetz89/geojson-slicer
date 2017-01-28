@@ -3,11 +3,9 @@
 
     const
         log = require('npmlog'),
-        pointInPoly = require('point-in-polygon');
-
-    log.level = 'verbose';
-
-    let slicer = {
+        lineclip = require('lineclip'),
+        pointInPoly = require('point-in-polygon'),
+        slicer = {
             slice : slice,
             slicePoint : slicePoint,
             sliceMultiPoint : sliceMultiPoint,
@@ -16,6 +14,23 @@
             slicePolygon : slicePolygon,
             sliceMultiPolygon : sliceMultiPolygon
         };
+
+    log.level = 'verbose';
+
+    let options = {
+        cutFeatures : true
+    };
+
+
+    function bounds2clipBounds(bounds) {
+        // clip bounds format [xmin, ymin, xmax, ymax]
+        // bounds format
+        // [ [ 11.583709716796875, 48.16150547016801 ],
+        //   [ 11.5850830078125, 48.16150547016801 ],
+        //   [ 11.5850830078125, 48.1605894313262 ],
+        //   [ 11.583709716796875, 48.1605894313262 ] ]
+        return [bounds[0][0], bounds[2][1], bounds[2][0], bounds[0][1]];
+    }
 
     function slicePoint(feature, bounds) {
         //  "coordinates": [102.0, 0.5]
@@ -32,6 +47,15 @@
     }
 
     function sliceLineString(feature, bounds) {
+        let result = lineclip.polyline(feature.geometry.coordinates, bounds2clipBounds(bounds));
+
+        if (result.length) {
+            // line is within bounds.
+            if (options.cutFeatures) {
+                feature.geometry.coordinates = result;
+            }
+            return feature;
+        }
         return null;
     }
 
@@ -51,9 +75,9 @@
     function slice(features, bounds) {
         let result = [];
 
-
         features.forEach(function(feature) {
             let slicedFeature;
+
             if (feature.type === 'Feature') {
                 // "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon",
                 if (this.hasOwnProperty('slice' + feature.geometry.type)) {
@@ -69,7 +93,13 @@
     }
 
 
+    // slicerOptions
+    // cutFeatures Boolean (true)
+    // Cut Features to fit within bounds. If set to false, the complete feature is added.
 
+    module.exports = function(slicerOptions) {
+        options = slicerOptions;
 
-    module.exports = slicer;
+        return slicer;
+    };
 }());
