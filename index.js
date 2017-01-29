@@ -29,12 +29,13 @@
         //   [ 11.5850830078125, 48.16150547016801 ],
         //   [ 11.5850830078125, 48.1605894313262 ],
         //   [ 11.583709716796875, 48.1605894313262 ] ]
+        // return [bounds[2][1], bounds[0][0], bounds[0][1], bounds[2][0]];
         return [bounds[0][0], bounds[2][1], bounds[2][0], bounds[0][1]];
     }
 
     function slicePoint(feature, bounds) {
         //  "coordinates": [102.0, 0.5]
-        var coord = feature.geometry.coordinates;
+        let coord = feature.geometry.coordinates;
 
         if (pointInPoly(coord, bounds)) {
             return feature;
@@ -49,7 +50,8 @@
     function sliceLineString(feature, bounds) {
         let result = lineclip.polyline(feature.geometry.coordinates, bounds2clipBounds(bounds));
 
-        if (result.length) {
+
+        if (result.length && result[0].length) {
             // line is within bounds.
             if (options.cutFeatures) {
                 feature.geometry.coordinates = result;
@@ -64,7 +66,8 @@
     }
 
     function slicePolygon(feature, bounds) {
-        var result = lineclip.polygon(feature.geometry.coordinates, bounds2clipBounds(bounds));
+        let result = lineclip.polygon(feature.geometry.coordinates[0], bounds2clipBounds(bounds));
+
 
         if (result.length) {
             // line is within bounds.
@@ -73,6 +76,8 @@
             }
             return feature;
         }
+
+        return null;
     }
 
     function sliceMultiPolygon(feature, bounds) {
