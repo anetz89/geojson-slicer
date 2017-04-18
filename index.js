@@ -54,7 +54,7 @@
         if (result.length && result[0].length) {
             // line is within bounds.
             if (options.cutFeatures) {
-                feature.geometry.coordinates = result;
+                feature.geometry.coordinates = result[0];
             }
             return feature;
         }
@@ -72,7 +72,7 @@
         if (result.length) {
             // line is within bounds.
             if (options.cutFeatures) {
-                feature.geometry.coordinates = result;
+                feature.geometry.coordinates = [result];
             }
             return feature;
         }
@@ -85,13 +85,13 @@
     }
 
 
-    function slice(features, bounds) {
+    function slice(features, bounds, filter) {
         let result = [];
 
         features.forEach(function(feature) {
             let slicedFeature;
 
-            if (feature.type === 'Feature') {
+            if (feature.type === 'Feature' && filter(feature)) {
                 // "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon",
                 if (this.hasOwnProperty('slice' + feature.geometry.type)) {
                     slicedFeature = this['slice' + feature.geometry.type](feature, bounds);
@@ -105,10 +105,6 @@
         return result;
     }
 
-
-    // slicerOptions
-    // cutFeatures Boolean (true)
-    // Cut Features to fit within bounds. If set to false, the complete feature is added.
 
     module.exports = function(slicerOptions) {
         options = slicerOptions;
