@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/anetz89/geojson-slicer#readme",
   "dependencies": {
+    "geobound-object": "^0.1.0",
     "lineclip": "^1.1.5",
     "npmlog": "^4.0.2",
     "point-in-polygon": "^1.0.1"
