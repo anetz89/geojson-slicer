@@ -1,6 +1,6 @@
 {
   "name": "geojson-slicer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "slice a set of features to fit within a certain bounding box",
   "main": "index.js",
   "scripts": {
