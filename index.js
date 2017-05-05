@@ -15,7 +15,7 @@
     slicer.bounds2clipBounds = function(bounds) {
         // clip bounds format [xmin, ymin, xmax, ymax]
         // return [bounds[0][0], bounds[2][1], bounds[2][0], bounds[0][1]];
-        return [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
+        return [bounds.getNorth(), bounds.getEast(), bounds.getSouth(), bounds.getWest()];
     };
 
     slicer.toPointInPolyBounds = function(bounds) {
@@ -46,7 +46,6 @@
 
     slicer.sliceLineString = function(feature, bounds, options) {
         let result = lineclip.polyline(feature.geometry.coordinates, slicer.bounds2clipBounds(bounds));
-
 
         if (result.length && result[0].length) {
             // line is within bounds.
